@@ -15,18 +15,18 @@ class TestShotgunInit(unittest.TestCase):
     def test_http_proxy_server(self):
         proxy_server = "someserver.com"
         http_proxy = proxy_server
-        sg = api.Shotgun(self.server_path, 
-                         self.script_name, 
-                         self.api_key, 
+        sg = api.Shotgun(self.server_path,
+                         self.script_name,
+                         self.api_key,
                          http_proxy=http_proxy,
                          connect=False)
         self.assertEquals(sg.config.proxy_server, proxy_server)
         self.assertEquals(sg.config.proxy_port, 8080)
         proxy_server = "123.456.789.012"
         http_proxy = proxy_server
-        sg = api.Shotgun(self.server_path, 
-                         self.script_name, 
-                         self.api_key, 
+        sg = api.Shotgun(self.server_path,
+                         self.script_name,
+                         self.api_key,
                          http_proxy=http_proxy,
                          connect=False)
         self.assertEquals(sg.config.proxy_server, proxy_server)
@@ -36,9 +36,9 @@ class TestShotgunInit(unittest.TestCase):
         proxy_server = "someserver.com"
         proxy_port = 1234
         http_proxy = "%s:%d" % (proxy_server, proxy_port)
-        sg = api.Shotgun(self.server_path, 
-                         self.script_name, 
-                         self.api_key, 
+        sg = api.Shotgun(self.server_path,
+                         self.script_name,
+                         self.api_key,
                          http_proxy=http_proxy,
                          connect=False)
         self.assertEquals(sg.config.proxy_server, proxy_server)
@@ -46,9 +46,9 @@ class TestShotgunInit(unittest.TestCase):
         proxy_server = "123.456.789.012"
         proxy_port = 1234
         http_proxy = "%s:%d" % (proxy_server, proxy_port)
-        sg = api.Shotgun(self.server_path, 
-                         self.script_name, 
-                         self.api_key, 
+        sg = api.Shotgun(self.server_path,
+                         self.script_name,
+                         self.api_key,
                          http_proxy=http_proxy,
                          connect=False)
         self.assertEquals(sg.config.proxy_server, proxy_server)
@@ -59,11 +59,11 @@ class TestShotgunInit(unittest.TestCase):
         proxy_port = 1234
         proxy_user = "user"
         proxy_pass = "password"
-        http_proxy = "%s:%s@%s:%d" % (proxy_user, proxy_pass, proxy_server, 
+        http_proxy = "%s:%s@%s:%d" % (proxy_user, proxy_pass, proxy_server,
                                       proxy_port)
-        sg = api.Shotgun(self.server_path, 
-                         self.script_name, 
-                         self.api_key, 
+        sg = api.Shotgun(self.server_path,
+                         self.script_name,
+                         self.api_key,
                          http_proxy=http_proxy,
                          connect=False)
         self.assertEquals(sg.config.proxy_server, proxy_server)
@@ -74,11 +74,11 @@ class TestShotgunInit(unittest.TestCase):
         proxy_port = 1234
         proxy_user = "user"
         proxy_pass = "password"
-        http_proxy = "%s:%s@%s:%d" % (proxy_user, proxy_pass, proxy_server, 
+        http_proxy = "%s:%s@%s:%d" % (proxy_user, proxy_pass, proxy_server,
                                       proxy_port)
-        sg = api.Shotgun(self.server_path, 
-                         self.script_name, 
-                         self.api_key, 
+        sg = api.Shotgun(self.server_path,
+                         self.script_name,
+                         self.api_key,
                          http_proxy=http_proxy,
                          connect=False)
         self.assertEquals(sg.config.proxy_server, proxy_server)
@@ -91,29 +91,29 @@ class TestShotgunInit(unittest.TestCase):
         proxy_port = 1234
         proxy_user = "user"
         proxy_pass = "p@ssword"
-        http_proxy = "%s:%s@%s:%d" % (proxy_user, proxy_pass, proxy_server, 
+        http_proxy = "%s:%s@%s:%d" % (proxy_user, proxy_pass, proxy_server,
                                       proxy_port)
-        sg = api.Shotgun(self.server_path, 
-                         self.script_name, 
-                         self.api_key, 
+        sg = api.Shotgun(self.server_path,
+                         self.script_name,
+                         self.api_key,
                          http_proxy=http_proxy,
                          connect=False)
         self.assertEquals(sg.config.proxy_server, proxy_server)
         self.assertEquals(sg.config.proxy_port, proxy_port)
         self.assertEquals(sg.config.proxy_user, proxy_user)
         self.assertEquals(sg.config.proxy_pass, proxy_pass)
- 
+
     def test_malformatted_proxy_info(self):
         proxy_server = "someserver.com"
         proxy_port = 1234
         proxy_user = "user"
         proxy_pass = "password"
-        http_proxy = "%s:%s@%s:%d" % (proxy_user, proxy_pass, proxy_server, 
+        http_proxy = "%s:%s@%s:%d" % (proxy_user, proxy_pass, proxy_server,
                                       proxy_port)
         conn_info = {
             'base_url': self.server_path,
             'script_name': self.script_name,
-            'api_key': self.api_key, 
+            'api_key': self.api_key,
             'connect': False,
         }
         conn_info['http_proxy'] = 'http://someserver.com'
@@ -122,7 +122,7 @@ class TestShotgunInit(unittest.TestCase):
         self.assertRaises(ValueError, api.Shotgun, **conn_info)
         conn_info['http_proxy'] = 'someserver.com:1234:5678'
         self.assertRaises(ValueError, api.Shotgun, **conn_info)
-    
+
 class TestShotgunSummarize(unittest.TestCase):
     '''Test case for _create_summary_request function and parameter
     validation as it exists in Shotgun.summarize.
@@ -130,8 +130,8 @@ class TestShotgunSummarize(unittest.TestCase):
     Does not require database connection or test data.'''
     def setUp(self):
         self.sg = api.Shotgun('http://server_path',
-                              'script_name', 
-                              'api_key', 
+                              'script_name',
+                              'api_key',
                               connect=False)
 
 
@@ -164,7 +164,7 @@ class TestShotgunSummarize(unittest.TestCase):
         result = self.get_call_rpc_params(args, {})
         actual_condition = result['filters']['conditions'][0]
         self.assertEquals(expected_condition, actual_condition)
-        
+
     @patch('shotgun_api3.Shotgun._call_rpc')
     def get_call_rpc_params(self, args, kws, call_rpc):
         '''Return params sent to _call_rpc from summarize.'''
@@ -177,7 +177,7 @@ class TestShotgunSummarize(unittest.TestCase):
         result = self.get_call_rpc_params(None, {})
         self.assertFalse(result.has_key('grouping'))
         grouping = ['something']
-        kws = {'grouping':grouping} 
+        kws = {'grouping':grouping}
         result = self.get_call_rpc_params(None, kws)
         self.assertEqual(grouping, result['grouping'])
 
@@ -188,8 +188,8 @@ class TestShotgunSummarize(unittest.TestCase):
 class TestShotgunBatch(unittest.TestCase):
     def setUp(self):
         self.sg = api.Shotgun('http://server_path',
-                              'script_name', 
-                              'api_key', 
+                              'script_name',
+                              'api_key',
                               connect=False)
 
     def test_missing_required_key(self):
@@ -241,7 +241,7 @@ class TestClientCapabilities(unittest.TestCase):
 
     def test_windows(self):
         self.assert_platform('win32','windows')
-        
+
     def test_linux(self):
         self.assert_platform('Linux', 'linux')
 
@@ -266,8 +266,8 @@ class TestClientCapabilities(unittest.TestCase):
             self.assertEquals(client_caps.local_path_field, None)
         finally:
             api.shotgun.sys.platform = platform
-        
-    @patch('shotgun_api3.shotgun.sys')
+
+    @patch('shotgun_api3.shotgun_repos.sys')
     def test_py_version(self, mock_sys):
         major = 2
         minor = 7
@@ -276,17 +276,17 @@ class TestClientCapabilities(unittest.TestCase):
         expected_py_version = "%s.%s" % (major, minor)
         client_caps = api.shotgun.ClientCapabilities()
         self.assertEquals(client_caps.py_version, expected_py_version)
-        
+
 class TestFilters(unittest.TestCase):
     def test_empty(self):
         expected = {
             "logical_operator": "and",
             "conditions": []
         }
-        
+
         result = api.shotgun._translate_filters([], None)
         self.assertEquals(result, expected)
-    
+
     def test_simple(self):
         filters = [
             ["code", "is", "test"],
@@ -300,10 +300,10 @@ class TestFilters(unittest.TestCase):
                 { "path": "sg_status_list", "relation": "is", "values": ["ip"] }
             ]
         }
-        
+
         result = api.shotgun._translate_filters(filters, "any")
         self.assertEquals(result, expected)
-    
+
     # Test both styles of passing arrays
     def test_arrays(self):
         expected = {
@@ -312,18 +312,18 @@ class TestFilters(unittest.TestCase):
                 { "path": "code", "relation": "in", "values": ["test1", "test2", "test3"] }
             ]
         }
-        
+
         filters = [
             ["code", "in", "test1", "test2", "test3"]
         ]
-        
+
         result = api.shotgun._translate_filters(filters, "all")
         self.assertEquals(result, expected)
-        
+
         filters = [
             ["code", "in", ["test1", "test2", "test3"]]
         ]
-        
+
         result = api.shotgun._translate_filters(filters, "all")
         self.assertEquals(result, expected)
 
@@ -345,7 +345,7 @@ class TestFilters(unittest.TestCase):
                 ]
             }
         ]
-        
+
         expected = {
             "logical_operator": "and",
             "conditions": [
@@ -366,32 +366,32 @@ class TestFilters(unittest.TestCase):
                 }
             ]
         }
-        
+
         result = api.shotgun._translate_filters(filters, "all")
         self.assertEquals(result, expected)
-    
+
     def test_invalid(self):
         self.assertRaises(api.ShotgunError, api.shotgun._translate_filters, [], "bogus")
         self.assertRaises(api.ShotgunError, api.shotgun._translate_filters, ["bogus"], "all")
-        
+
         filters = [{
             "filter_operator": "bogus",
             "filters": []
         }]
-        
+
         self.assertRaises(api.ShotgunError, api.shotgun._translate_filters, filters, "all")
-        
+
         filters = [{
             "filters": []
         }]
-        
+
         self.assertRaises(api.ShotgunError, api.shotgun._translate_filters, filters, "all")
-        
+
         filters = [{
             "filter_operator": "all",
             "filters": { "bogus": "bogus" }
         }]
-        
+
         self.assertRaises(api.ShotgunError, api.shotgun._translate_filters, filters, "all")
 
 

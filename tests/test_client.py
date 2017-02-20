@@ -25,7 +25,7 @@ from shotgun_api3.shotgun import ServerCapabilities, SG_TIMEZONE
 import base
 
 class TestShotgunClient(base.MockTestBase):
-    '''Test case for shotgun api with server interactions mocked.'''
+    '''Test case for shotgun_repos api with server interactions mocked.'''
 
     def setUp(self):
         super(TestShotgunClient, self).setUp()
@@ -184,8 +184,8 @@ class TestShotgunClient(base.MockTestBase):
         args, _ = self.sg._http_request.call_args
         (_, _, _, headers) = args
         ssl_validate_lut = {True: "no-validate", False: "validate"}
-        expected = "shotgun-json (%s); Python %s (%s); ssl %s (%s)" % (
-                        api.__version__, 
+        expected = "shotgun_repos-json (%s); Python %s (%s); ssl %s (%s)" % (
+                        api.__version__,
                         client_caps.py_version,
                         client_caps.platform.capitalize(),
                         client_caps.ssl_version,
@@ -198,8 +198,8 @@ class TestShotgunClient(base.MockTestBase):
         self.sg.info()
         args, _ = self.sg._http_request.call_args
         (_, _, _, headers) = args
-        expected = "shotgun-json (%s); Python %s (%s); ssl %s (%s); test-agent" % (
-                        api.__version__, 
+        expected = "shotgun_repos-json (%s); Python %s (%s); ssl %s (%s); test-agent" % (
+                        api.__version__,
                         client_caps.py_version,
                         client_caps.platform.capitalize(),
                         client_caps.ssl_version,
@@ -212,8 +212,8 @@ class TestShotgunClient(base.MockTestBase):
         self.sg.info()
         args, _ = self.sg._http_request.call_args
         (_, _, _, headers) = args
-        expected = "shotgun-json (%s); Python %s (%s); ssl %s (%s)" % (
-                        api.__version__, 
+        expected = "shotgun_repos-json (%s); Python %s (%s); ssl %s (%s)" % (
+                        api.__version__,
                         client_caps.py_version,
                         client_caps.platform.capitalize(),
                         client_caps.ssl_version,
@@ -477,7 +477,7 @@ class TestShotgunClient(base.MockTestBase):
             "FakeAsset", 456)
 
 class TestShotgunClientInterface(base.MockTestBase):
-    '''Tests expected interface for shotgun module and client'''
+    '''Tests expected interface for shotgun_repos module and client'''
     def test_client_interface(self):
         expected_attributes = ['base_url',
                                'config',
