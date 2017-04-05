@@ -1581,7 +1581,7 @@ class TestErrors(base.TestBase):
         sg = shotgun_api3.Shotgun(server_url, login=login, password='not a real password')
         self.assertRaises(shotgun_api3.AuthenticationFault, sg.find_one, 'Shot',[])
 
-    @patch('shotgun_api3.shotgun.Http.request')
+    @patch('shotgun_api3.shotgun_repos.Http.request')
     def test_status_not_200(self, mock_request):
         response = MagicMock(name="response mock", spec=dict)
         response.status = 300
@@ -1589,7 +1589,7 @@ class TestErrors(base.TestBase):
         mock_request.return_value = (response, {})
         self.assertRaises(shotgun_api3.ProtocolError, self.sg.find_one, 'Shot', [])
 
-    @patch('shotgun_api3.shotgun.Http.request')
+    @patch('shotgun_api3.shotgun_repos.Http.request')
     def test_sha2_error(self, mock_request):
         # Simulate the SSLHandshakeError raised with SHA-2 errors
         mock_request.side_effect = SSLHandshakeError("[Errno 1] _ssl.c:480: error:0D0C50A1:asn1 "
@@ -1627,7 +1627,7 @@ class TestErrors(base.TestBase):
         if original_env_val is not None:
             os.environ["SHOTGUN_FORCE_CERTIFICATE_VALIDATION"] = original_env_val
 
-    @patch('shotgun_api3.shotgun.Http.request')
+    @patch('shotgun_api3.shotgun_repos.Http.request')
     def test_sha2_error_with_strict(self, mock_request):
         # Simulate the SSLHandshakeError raised with SHA-2 errors
         mock_request.side_effect = SSLHandshakeError("[Errno 1] _ssl.c:480: error:0D0C50A1:asn1 "
@@ -1647,7 +1647,7 @@ class TestErrors(base.TestBase):
             result = self.sg.info()
         except SSLHandshakeError:
             # ensure the api has NOT reset the values in the fallback behavior because we have
-            # set the env variable to force validation
+            # set the farmjob variable to force validation
             self.assertFalse(self.sg.config.no_ssl_validation)
             self.assertFalse(shotgun_api3.shotgun.NO_SSL_VALIDATION)
             self.assertFalse("(no-validate)" in " ".join(self.sg._user_agents))
@@ -1683,7 +1683,7 @@ class TestErrors(base.TestBase):
         path = os.path.abspath(os.path.expanduser(os.path.join(this_dir,"empty.txt")))
         self.assertRaises(shotgun_api3.ShotgunError, self.sg.upload, 'Version', 123, path)
         self.assertRaises(shotgun_api3.ShotgunError, self.sg.upload_thumbnail, 'Version', 123, path)
-        self.assertRaises(shotgun_api3.ShotgunError, self.sg.upload_filmstrip_thumbnail, 'Version', 
+        self.assertRaises(shotgun_api3.ShotgunError, self.sg.upload_filmstrip_thumbnail, 'Version',
                           123, path)
 
     def test_upload_missing_file(self):
@@ -1693,7 +1693,7 @@ class TestErrors(base.TestBase):
         path = "/path/to/nowhere/foo.txt"
         self.assertRaises(shotgun_api3.ShotgunError, self.sg.upload, 'Version', 123, path)
         self.assertRaises(shotgun_api3.ShotgunError, self.sg.upload_thumbnail, 'Version', 123, path)
-        self.assertRaises(shotgun_api3.ShotgunError, self.sg.upload_filmstrip_thumbnail, 'Version', 
+        self.assertRaises(shotgun_api3.ShotgunError, self.sg.upload_filmstrip_thumbnail, 'Version',
                           123, path)
 
 #    def test_malformed_response(self):
@@ -2103,7 +2103,7 @@ class TestNoteThreadRead(base.LiveTestBase):
 
         # the reply stream adds an image to the user fields in order
         # to include thumbnails for users, so remove this before we compare
-        # against the shotgun find data. The image is tested elsewhere.
+        # against the shotgun_repos find data. The image is tested elsewhere.
         del data["user"]["image"]
 
         self.assertEqual(reply_data, data)
@@ -2507,7 +2507,7 @@ def _has_unicode(data):
 
 def _get_path(url):
     """Returns path component of a url without the sheme, host, query, anchor, or any other
-    additional elements. 
+    additional elements.
     For example, the url "https://foo.shotgunstudio.com/page/2128#Shot_1190_sr10101_034"
     returns "/page/2128"
     """
